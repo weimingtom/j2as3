@@ -9,4 +9,4 @@ I made some improvements.  Hopefully others will be able to find this project no
 
 The code isn't something to be proud of, and has some serious limitations.  Generics are not supported, nor are enums.
 
-Here is a summary of the differences between Java and ActionScript 3: http://blog.sharendipity.com/moving-to-flash-part-2
+[http://blog.sharendipity.com/moving-to-flash-part-2 Here] is a summary of the differences between Java and ActionScript 3: 
