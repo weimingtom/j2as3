@@ -1,0 +1,12 @@
+#summary Java to ActionScript 3 ... because it's too useful not to have
+
+= Introduction =
+I found a mention of [http://osflash.org/projects/j2as3 j2as3] [http://blog.sharendipity.com/moving-to-flash-part-3 here]
+
+Unfortunately, the j2as3 download seems to have been non-functional for a long time.  [http://thunderheadxpler.blogspot.com/search/label/J2AS3 This] blog post described an AIR version of the converter.  It was hard to find the source to the AIR file, but I eventually did.
+
+I made some improvements.  Hopefully others will be able to find this project now.
+
+The code isn't something to be proud of, and has some serious limitations.  Generics are not supported, nor are enums.
+
+Here is a summary of the differences between Java and ActionScript 3: http://blog.sharendipity.com/moving-to-flash-part-2
