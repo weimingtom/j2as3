@@ -3,14 +3,20 @@ package com.j2as3 {
 	
 	internal class Converter {
 		private var str:String;
+		private var orginalStr:String;
 		private var tokenizer:Tokenizer;
 		private var inFNDef:Boolean, inConstructor:Boolean;
 		private var cFNName:String,cFNType:String;
 		private var post:String;
+		public var classCount:int;
+		public var lineCount:int;
+		public var isJavaFile:Boolean;
 		
-		public function Converter(str:String){
-			this.str = str;
+		public function Converter(str:String) {
+			orginalStr = this.str = str;
 			tokenizer = new Tokenizer(str);
+			lineCount = classCount = 0;
+			isJavaFile = false;
 		}
 		
 		public function getNewClass():String {
@@ -19,14 +25,14 @@ package com.j2as3 {
 			var orig:String = this.str;
 			var temp:String;
 			var lastPos:uint = 0;	
-			var newPos:uint;	
+			var newPos:uint;
 			var used:Boolean;
 			var t:Token;
 			
 			post = "";
 			
 			for (var i:int=0; i<tokens.length; i++) {
-				t=tokens[i];
+				t = tokens[i];
 				used = false;
 				if (i<tokens.length-3) {
 					if (isIdentifier(tokens[i]) && 
@@ -36,27 +42,32 @@ package com.j2as3 {
 						var varType:String = toASType(tokens[i]);
 						
 						if(inFNDef|| inConstructor)
-							str+=varName + ":" + varType;
+							str += varName + ":" + varType;
 						else
-							str+="var " + varName + ":" + varType
+							str += "var " + varName + ":" + varType;
 						
 						i += 1;
 						used = true;
 					} else if (isIdentifier(tokens[i]) && 
 					           tokens[i+1].type==Token.STRING_LITERAL && 
-					           tokens[i+2]=="(") { //Function definition
+					           tokens[i+2]=="(") { // Function definition
 						inFNDef = true;
 						cFNName = tokens[i+1];
 						cFNType = toASType(tokens[i]);
 						
 						str += "function " + cFNName;
 						used = true;
-						i+=1;
+						i += 1;
 					}
 				}
 				
-				if (i<tokens.length-3) {	//Constructor definition
-					if (isPPP(tokens[i]) && isIdentifier(tokens[i+1]) && tokens[i+2]=="("){
+				if (tokens[i]=="class") {
+					isJavaFile = true;
+					classCount++;
+				}
+				
+				if (i<tokens.length-3) {	// Constructor definition
+					if (isPPP(tokens[i]) && isIdentifier(tokens[i+1]) && tokens[i+2]=="(") {
 						inConstructor = true;
 						used = true;
 						str += tokens[i] + " function " + tokens[i+1];
@@ -66,7 +77,7 @@ package com.j2as3 {
 				
 				if (i<tokens.length-3) {
 					if (tokens[i]=="package" && tokens[i+1].type==Token.STRING_LITERAL && tokens[i+2]==";") {
-						str += tokens[i] + " " + tokens[i+1] + "\n{\n";
+						str += tokens[i] + " " + tokens[i+1] + " {\n";
 						used = true;
 						i += 2;
 						post += "\n}";
@@ -74,7 +85,7 @@ package com.j2as3 {
 				}
 				
 				if (i<tokens.length-3) {
-					if (tokens[i]=="(" && isIdentifier(tokens[i+1]) && tokens[i+2]==")"){
+					if (tokens[i]=="(" && isIdentifier(tokens[i+1]) && tokens[i+2]==")") {
 						if (tokens[i-1].type!=Token.STRING_LITERAL && tokens[i-1].type!=Token.KEYWORD) {
 							var castType:String = tokens[i+1];
 							i += 3;
@@ -87,7 +98,7 @@ package com.j2as3 {
 								n = tokens[i];
 								if (n=="(" || n=="[" || n=="{") {
 									inside++;
-									sss += n;
+									sss += " " + n;
 								}
 
 								if (inside>0) {
@@ -130,7 +141,7 @@ package com.j2as3 {
 					if (inFNDef) {
 						inFNDef = false;
 						used=true;
-						str += "):" + cFNType;
+						str += "):" + cFNType + " ";
 					} else if (inConstructor) {
 						inConstructor = false;
 					}
@@ -151,6 +162,12 @@ package com.j2as3 {
 					str += temp;
 				}
 				lastPos = newPos;
+			}
+			if (isJavaFile) {
+				var lines:Array = orginalStr.split("\n");
+				lineCount = lines.length;
+				if (lines[lineCount-1].length==0)
+					lineCount--;
 			}
 			return str + post;
 		}
@@ -182,14 +199,14 @@ package com.j2as3 {
 			return type;
 		}
 		
-		private function cleanNumber(str:String):String{
+		private function cleanNumber(str:String):String {
 			while(str.search("f")>-1)
 				str = str.replace("f", "");
 			return str;
 		}
 		
 		private function replace(str:String, start:uint, end:uint, rep:String):String {
-			return str.substring(0,start) + rep + str.substring(end,str.length);
+			return str.substring(0, start) + rep + str.substring(end, str.length);
 		}
 	}
 }

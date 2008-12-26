@@ -89,7 +89,6 @@ package com.j2as3 {
 		public function Tokenizer(str:String) {
 			this.string = str;
 			pos = 0;
-			
 			symbols.sort(lengthSort);
 			keywords.sort(lengthSort);
 		}
@@ -136,7 +135,7 @@ package com.j2as3 {
 			} else if ((str=isSymbol(pos))!=null) {
 				pos += str.length;
 				return new Token(str, Token.SYMBOL, pos);
-			} else if(c=="\"") {	// a string
+			} else if (c=="\"") {	// a string
 				skipUntilWithEsc("\"");
 				return new Token(string.substring(start, pos), Token.STRING, pos);
 			} else if (c=="'") { // a char
