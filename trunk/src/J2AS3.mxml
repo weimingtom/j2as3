@@ -46,6 +46,11 @@
         	click="doConvert()" 
         	enabled="{outputDirSelected &amp;&amp; inputDirSelected}" 
         	toolTip="Run the conversion"/>
+        <mx:CheckBox 
+        	id="copyAssets" 
+        	label="Copy assets"
+        	selected="true" 
+        	toolTip="Copy jars, images, xml, etc. if selected. Hidden files and CVS directories are never copied." />
         <mx:ProgressBar id="progressBar" width="100%" mode="manual" visible="false" label="Converted %3%%" />        
     </mx:HBox>
     <mx:Label text="Converted files:" fontWeight="bold" textAlign="left" width="100%" />

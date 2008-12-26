@@ -8,6 +8,7 @@ package com.j2as3 {
     
     import mx.controls.Alert;
     import mx.controls.Button;
+    import mx.controls.CheckBox;
     import mx.controls.ProgressBar;
     import mx.controls.TextArea;
     import mx.controls.TextInput;
@@ -15,23 +16,31 @@ package com.j2as3 {
     import mx.formatters.NumberFormatter;
     import mx.managers.DragManager;
 
+	/** @author Mike Slinn <mslinn@mslinn.com>
+	 * TODO make progress bar work; need to scan through input directory first, counting files. 
+	 * This is a screwy way to organize code, but because it works I'm not going to mess with it */
     public class J2AS3Application extends WindowedApplication {
         public var textArea:TextArea;
         public var outputButton:Button;
         public var inputButton:Button;
         public var progressBar:ProgressBar;
+        public var copyAssets:CheckBox;
+        
         [Bindable] protected var inputDirSelected:Boolean = false;
         [Bindable] protected var outputDirSelected:Boolean = false;
         [Bindable] protected var _outputDir:String;
         [Bindable] protected var _inputDir:String;
-        protected var outputFile:File;
-        protected var inputFile:File;
-        protected var fileCount:int;
-        protected var javaFileCount:int;
-        protected var dirCount:int;
-        protected var classCount:int;
-        protected var lineCount:int;
-        protected var numberFormatter:NumberFormatter = new NumberFormatter();
+        
+        private static var numberFormatter:NumberFormatter = new NumberFormatter();
+
+        private var outputFile:File;
+        private var inputFile:File;
+        private var fileCount:int;
+        private var javaFileCount:int;
+        private var dirCount:int;
+        private var classCount:int;
+        private var lineCount:int;
+        
         
         public function J2AS3Application() {
             super();
@@ -45,10 +54,35 @@ package com.j2as3 {
             inputButton .addEventListener(NativeDragEvent.NATIVE_DRAG_DROP,  onInputDragDrop,   false, 0.0, true);
         }
         
-        private function convertFile(file:File):void {
+        private function convertDirectory(inputFile:File, outputFile:File):void {
+            var files:Array = inputFile.getDirectoryListing();
+            var ind:Number = 0;
+            for each (var anInputFile:File in files) {
+                progressBar.setProgress(ind++, files.length);
+            	if (anInputFile.isHidden)
+            		continue;
+                var outputFile2:File = new File(outputFile.nativePath + File.separator + anInputFile.name);
+                if (anInputFile.isDirectory) {
+                	if (anInputFile.name=="CVS")
+                		continue;
+                    dirCount++;
+                    convertDirectory(anInputFile, outputFile2);
+                } else {
+                	//File.mkdir(outputFile2.parent); is this necessary?  how to do it if so?
+                	if (anInputFile.name.match(".*\\.java"))
+	                	convertFile(anInputFile, outputFile);
+					else if (copyAssets.selected)
+						anInputFile.copyTo(outputFile2, true);	                           
+	                textArea.text += anInputFile.name + "\n";
+	                fileCount++;
+                }
+            }
+        }
+        
+        private function convertFile(anInputFile:File, outputFile:File):void {
             var code:String;
             var fileStream:FileStream = new FileStream();
-            fileStream.open(file, FileMode.READ);
+            fileStream.open(anInputFile, FileMode.READ);
             try {
                 code = fileStream.readUTFBytes(fileStream.bytesAvailable);                
             } finally {
@@ -63,28 +97,17 @@ package com.j2as3 {
                 classCount += converter.classCount;
                 lineCount += converter.lineCount;
             }
-            writeFile(file, as3Code); 
+            writeFile(anInputFile, outputFile, as3Code); 
         }
         
         protected function doConvert():void {
         	lineCount = dirCount = fileCount = javaFileCount = 0;
         	progressBar.visible = true;
             textArea.text = "";
-            var arr:Array = inputFile.getDirectoryListing();
-            var ind:Number = 0;
             progressBar.minimum = 0;
-            progressBar.maximum = arr.length;
-            for each (var file:File in arr) {
-                progressBar.setProgress(ind++, arr.length);
-                if (file.isDirectory) {  // TODO recurse
-                    dirCount++;
-                    continue;
-                }
-                convertFile(file);                   
-                textArea.text += file.name + "\n";
-                fileCount++;
-            }
-            progressBar.setProgress(arr.length, arr.length);
+            progressBar.maximum = 100;
+            convertDirectory(inputFile, outputFile);
+            progressBar.setProgress(100, 100);
             textArea.text += "===============================\n";
             textArea.text += numberFormatter.format(fileCount) + " total files\n";
             textArea.text += numberFormatter.format(javaFileCount) + " Java files\n";
@@ -225,10 +248,10 @@ package com.j2as3 {
         	return null;
 		}
         
-        private function writeFile(orig:File, as3Code:String):void {
-            var dest:File = outputFile.resolvePath(orig.name.replace(".java", ".as"));
-            var fileStream : FileStream = new FileStream();
-            fileStream.open(dest, FileMode.WRITE);
+        private function writeFile(anInputFile:File, outputFile:File, as3Code:String):void {
+            var destFile:File = outputFile.resolvePath(anInputFile.name.replace(".java", ".as"));
+            var fileStream:FileStream = new FileStream();
+            fileStream.open(destFile, FileMode.WRITE);
             try {
                 fileStream.writeUTFBytes(as3Code);                
             } finally {
