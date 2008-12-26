@@ -7,6 +7,6 @@ Unfortunately, the j2as3 download seems to have been non-functional for a long t
 
 I made some improvements.  Hopefully others will be able to find this project now.
 
-The code isn't something to be proud of, and has some serious limitations.  Generics are not supported, nor are enums.
+The code isn't something to be proud of, and has some serious limitations.  Generics are not supported, nor are enums.  If you would like to make improvements to the code, please let me know.
 
-[http://blog.sharendipity.com/moving-to-flash-part-2 Here] is a summary of the differences between Java and ActionScript 3: 
+[http://blog.sharendipity.com/moving-to-flash-part-2 Here] is a summary of the differences between Java and ActionScript 3.
