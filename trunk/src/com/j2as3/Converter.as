@@ -61,7 +61,7 @@ package com.j2as3 {
 					}
 				}
 				
-				if (tokens[i]=="class") {
+				if (tokens[i]=="class" || tokens[i]=="interface") {
 					isJavaFile = true;
 					classCount++;
 				}
