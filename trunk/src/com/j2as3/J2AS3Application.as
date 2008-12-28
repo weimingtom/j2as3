@@ -101,7 +101,7 @@ package com.j2as3 {
         }
         
         protected function doConvert():void {
-        	lineCount = dirCount = fileCount = javaFileCount = 0;
+        	classCount = lineCount = dirCount = fileCount = javaFileCount = 0;
         	progressBar.visible = true;
             textArea.text = "";
             progressBar.minimum = 0;
