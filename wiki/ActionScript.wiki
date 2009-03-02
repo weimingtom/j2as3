@@ -1,0 +1,3 @@
+#summary ActionScript 3 Definition
+
+See http://en.wikipedia.org/wiki/ActionScript
