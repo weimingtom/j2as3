@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<j2as3:J2AS3Application
+	creationComplete="onCreationComplete()"
+    xmlns:mx="http://www.adobe.com/2006/mxml"
+    xmlns:j2as3="com.j2as3.*"
+    layout="vertical">
+    <mx:Script>
+    	<![CDATA[
+    		protected function onCreationComplete():void {
+	        	inputButton.width = outputButton.width;
+	        	inputLabel.width  = outputLabel.width;
+	        }
+    	]]>
+    </mx:Script>
+    <mx:HBox width="100%" textAlign="left">
+        <mx:Button 
+        	id="inputButton" 
+        	label="Input" 
+        	click="doInput()" 
+        	toolTip="Select the input directory (you can drag and drop a directory from your file manager)" />
+        <mx:Label fontWeight="bold" id="inputLabel" text="Input directory:" />
+        <mx:TextInput 
+        	change="onInputChange(event)"
+        	focusOut="onInputFocusOut(event)" 
+        	id="inputDir" 
+        	text="{_inputDir}" 
+        	width="100%" />
+    </mx:HBox>
+    <mx:HBox width="100%" textAlign="left">
+        <mx:Button 
+        	id="outputButton" 
+        	label="Output" 
+        	click="doOutput()" 
+        	toolTip="Select the output directory (you can drag and drop a directory from your file manager)"/>
+        <mx:Label fontWeight="bold" id="outputLabel" text="Output directory:" />
+        <mx:TextInput 
+        	change="onOutputChange(event)" 
+        	focusOut="onOutputFocusOut(event)" 
+        	id="outputDir" 
+        	text="{_outputDir}" 
+        	width="100%" />
+    </mx:HBox>
+    <mx:HBox width="100%" textAlign="left">
+        <mx:Button 
+        	label="Convert" 
+        	click="doConvert()" 
+        	enabled="{outputDirSelected &amp;&amp; inputDirSelected}" 
+        	toolTip="Run the conversion"/>
+        <mx:CheckBox 
+        	id="copyAssets" 
+        	label="Copy assets"
+        	selected="true" 
+        	toolTip="Copy jars, images, xml, etc. if selected. Hidden files and CVS directories are never copied." />
+        <mx:ProgressBar id="progressBar" width="100%" mode="manual" visible="false" label="Converted %3%%" />        
+    </mx:HBox>
+    <mx:Label text="Converted files:" fontWeight="bold" textAlign="left" width="100%" />
+    <mx:TextArea  
+    	editable="false"
+    	height="100%" 
+    	id="textArea" 
+    	width="100%" 
+    	toolTip="Converted file names will appear here" />
+</j2as3:J2AS3Application>
