@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flexLibProperties version="1">
+<includeClasses>
+<classEntry path="j2as3.collection.ArrayList"/>
+<classEntry path="j2as3.collection.HashMap"/>
+<classEntry path="j2as3.collection.SortedArrayList"/>
+<classEntry path="j2as3.collection.TreeMap"/>
+</includeClasses>
+<includeResources/>
+<namespaceManifests/>
+</flexLibProperties>
