@@ -1,6 +1,4 @@
-/* Measures elapsed time.
- *
- * Copyright 2008 Mike Slinn (mslinn@mslinn.com)
+/* Copyright 2008 Mike Slinn (mslinn@mslinn.com)
  * 
  * Mike Slinn licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
@@ -21,6 +19,7 @@ package j2as3.util {
     import mx.formatters.NumberBaseRoundType;
     import mx.formatters.NumberFormatter;
 
+    /** Measures elapsed time. */
 	public class StopWatch {
         public var millis:uint = 0;
         private static var tenthsSecondFormatter:NumberFormatter = new NumberFormatter();
