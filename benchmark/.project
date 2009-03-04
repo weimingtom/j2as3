@@ -3,6 +3,7 @@
 	<name>J2AS3CollectionsBenchmark</name>
 	<comment></comment>
 	<projects>
+		<project>as3ds</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

@@ -29,12 +29,13 @@ package j2as3.util {
             tenthsSecondFormatter.rounding = NumberBaseRoundType.NEAREST;
 		}
 
-        public function reportElapsedTime(msg:String):Number {
+        public function reportElapsedTime(msg:String):String {
             var now:uint = getTimer();
             var elapsedSeconds:Number = (now - millis) / 1000.0;
-            trace(msg + ": " + tenthsSecondFormatter.format(elapsedSeconds) + " seconds");
+            var reportMsg:String = msg + ": " + tenthsSecondFormatter.format(elapsedSeconds) + " seconds";
+            trace(reportMsg);
             millis = now;
-            return elapsedSeconds;
+            return reportMsg;
         }
         
         public function startTimer():void { millis = getTimer(); }
