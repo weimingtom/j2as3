@@ -23,34 +23,36 @@ $Id$  -->
 	<mx:Script>
 		<![CDATA[
 		    import j2as3.util.StopWatch;
-            import j2as3.collection.HashMap;
+            import collection.HashMap;
             import mx.formatters.NumberFormatter;
 		  
 			private var stopWatch:StopWatch = new StopWatch();
 			private var hashMap:HashMap = new HashMap();
             private var numberFormatter:NumberFormatter = new NumberFormatter();
 			  
-            private function reads(readCount:int):void {
+            /** Might be a better test if it read six to ten values */
+            private function reads(readCount:int):String {
                 hashMap.put("key", "value");
                 stopWatch.startTimer();
                 for (var i:int=0; i<readCount; i++)
                     hashMap.getItem("key");
-                stopWatch.reportElapsedTime(numberFormatter.format(readCount) + " reads");
+                return stopWatch.reportElapsedTime(numberFormatter.format(readCount) + " reads");
             }
 
-            private function writes(writeCount:int):void {
+            /** Might be a better test if it wrote six to ten values */
+            private function writes(writeCount:int):String {
                 stopWatch.startTimer();
                 for (var i:int=0; i<writeCount; i++) {
                     hashMap.put("key", i);
-                    hashMap.getItem("key");
                 }
-                stopWatch.reportElapsedTime(numberFormatter.format(writeCount) + " writes");
+                return stopWatch.reportElapsedTime(numberFormatter.format(writeCount) + " writes");
             }
 
             private function benchmark():void {
-                reads(50000);
-                writes(50000)
+                msg.text = reads(50000) + "; ";
+                msg.text += writes(50000);
             }
 		]]>
 	</mx:Script>
+	<mx:Label id="msg" />
 </mx:Application>
