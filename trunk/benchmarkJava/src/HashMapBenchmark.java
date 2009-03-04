@@ -25,6 +25,7 @@ public class HashMapBenchmark {
 	private HashMap hashMap = new HashMap();
     private NumberFormat numberFormat = NumberFormat.getNumberInstance();
 
+    /** Might be a better test if it read six to ten values */
     public void reads(int readCount) {
         hashMap.put("key", "value");
         stopWatch.startTimer();
@@ -33,11 +34,11 @@ public class HashMapBenchmark {
         stopWatch.reportElapsedTime(numberFormat.format(readCount) + " reads");
     }
 
+    /** Might be a better test if it wrote six to ten values */
     public void writes(int writeCount) {
         stopWatch.startTimer();
         for (int i=0; i<writeCount; i++) {
             hashMap.put("key", new Integer(i).toString());
-            hashMap.get("key");
         }
         stopWatch.reportElapsedTime(numberFormat.format(writeCount) + " writes");
     }
